@@ -70,8 +70,8 @@ def train(model, X, y, num_passes=10000, reg_lambda = .1, learning_rate=0.1):
     previous_loss = float('inf')
     i = 0
     losses = []
-    while done == False:  #comment out while performance testing
-    #while i < 150:
+    #while done == False:  #comment out while performance testing
+    while i < 1500:
         #feed forward
         z1,a1,z2,a2,z3,output = feed_forward(model, X)
         #backpropagation
@@ -83,7 +83,7 @@ def train(model, X, y, num_passes=10000, reg_lambda = .1, learning_rate=0.1):
         model['b2'] -= learning_rate * db2
         model['W3'] -= learning_rate * dW3
         model['b3'] -= learning_rate * db3
-        if i % 1000 == 0:
+        if i % 100 == 0:
             loss = calculate_loss(model, X, y, reg_lambda)
             losses.append(loss)
             print "Loss after iteration %i: %f" %(i, loss)  #uncomment once testing finished, return mod val to 1000
