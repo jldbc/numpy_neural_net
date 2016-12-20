@@ -2,6 +2,12 @@ import numpy as np
 import math
 from sklearn import datasets
 
+def relu(X):
+	return np.maximum(X, 0)
+
+def relu_derivative(X):
+	return 1. * (X > 0)
+
 def build_model(X,hidden_nodes,output_dim=2):
     model = {}
     input_dim = X.shape[1]
@@ -15,7 +21,8 @@ def feed_forward(model, x):
     W1, b1, W2, b2 = model['W1'], model['b1'], model['W2'], model['b2']
     # Forward propagation
     z1 = x.dot(W1) + b1
-    a1 = np.tanh(z1)
+    #a1 = np.tanh(z1)
+    a1 = relu(z1)
     z2 = a1.dot(W2) + b2
     exp_scores = np.exp(z2)
     out = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
@@ -39,7 +46,8 @@ def backprop(X,y,model,z1,a1,z2,output,reg_lambda):
     delta3[range(X.shape[0]), y] -= 1  #yhat - y
     dW2 = (a1.T).dot(delta3)
     db2 = np.sum(delta3, axis=0, keepdims=True)
-    delta2 = delta3.dot(model['W2'].T) * (1 - np.power(a1, 2))
+    #delta2 = delta3.dot(model['W2'].T) * (1 - np.power(a1, 2)) #if tanh
+    delta2 = delta3.dot(model['W2'].T) * relu_derivative(a1) #if ReLU
     dW1 = np.dot(X.T, delta2)
     db1 = np.sum(delta2, axis=0)
     # Add regularization terms
@@ -66,7 +74,7 @@ def train(model, X, y, num_passes=10000, reg_lambda = .1, learning_rate=0.1):
         if i % 1000 == 0:
         	loss = calculate_loss(model, X, y, reg_lambda)
         	print "Loss after iteration %i: %f" %(i, loss)
-        	if (previous_loss-loss)/previous_loss < .05:
+        	if (previous_loss-loss)/previous_loss < 0.01:
         		done = True
         		print i
         	previous_loss = loss
@@ -75,19 +83,15 @@ def train(model, X, y, num_passes=10000, reg_lambda = .1, learning_rate=0.1):
 
 def main():
 	#toy dataset
-	X, y = datasets.make_moons(20, noise=0.10)
+	X, y = datasets.make_moons(16, noise=0.10)
 	num_examples = len(X) # training set size
 	nn_input_dim = 2 # input layer dimensionality
 	nn_output_dim = 2 # output layer dimensionality 
 	learning_rate = 0.01 # learning rate for gradient descent
 	reg_lambda = 0.01 # regularization strength
-	model = build_model(X,8,2)
+	model = build_model(X,20,2)
 	model = train(model,X, y, reg_lambda=reg_lambda, learning_rate=learning_rate)
 	output = feed_forward(model, X)
 	preds = np.argmax(output[3], axis=1)
 
 main()
-
-
-
-#
