@@ -1,8 +1,16 @@
-from feed_forward_network import build_model, relu, relu_derivative, feed_forward, \
+from three_layer_network import build_model, relu, relu_derivative, feed_forward, \
 								calculate_loss, backprop, train
+#from three_layer_network import *
 import matplotlib.pyplot as plt
 from sklearn import datasets
 import numpy as np
+
+"""
+to reproduce tests, modify the three_layer_network.py file by commenting out 
+'while done == True', and uncommenting 'while i < 150', and then by changing 
+'if i % 1000 == 0' to 'if i % 150 == 0'
+"""
+
 
 def num_observations():
 	obs_values = [10, 100, 1000]
