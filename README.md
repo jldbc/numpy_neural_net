@@ -12,6 +12,7 @@ This repo includes a three and four layer nueral network (with one and two hidde
 A good starting point for this model is a learning rate of 0.01, regularization of 0.01, 32 nodes per hidden layer, and ReLU activations. These will, of course, differ according the context in which the model is used. 
 
 parameter tuning looked as follows:
+
 ![inline 50%](images/num_nodes.png)![inline 50%](images/num_observations.png)
 ![inline 50%](images/regularization.png)![inline 50%](images/learning_rate.png)
 
